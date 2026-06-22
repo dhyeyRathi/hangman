@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
 
 type keyboardProps = {
-  guessedLetters : String[];
-  onClick : any;
+  guessedLetters : string[];
+  onClick : (key: string) => void;
   disabled: boolean
 }
 

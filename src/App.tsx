@@ -41,7 +41,7 @@ function App() {
   ];
 
   // const [guess, setGuess] = useState<string[]>([])
-    const [guessedLetters, setGuessedLetters] = useState<String[]>([]);
+    const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
 
   const incorrectLetters = guessedLetters.filter((letter: any) => !word.includes(letter))
 
@@ -54,17 +54,12 @@ function App() {
    useEffect(() =>{
     if(!isLoser) return;
     
-     for(let i:number =0; i<word.length; i++){
-     const randomHint: number =  Math.floor(Math.random() * word.length)
-     setGuessedLetters((e) => [...e,  word[randomHint]] );
-   }
-
-   const handler = (e: KeyboardEvent) => {
-    // ... your existing keyboard handler ...
-  };
-
-  window.addEventListener("keydown", handler);
-  return () => window.removeEventListener("keydown", handler);
+    // Reveal all letters on loss
+    setGuessedLetters(prev => {
+      const allLetters = word.split("");
+      const uniqueMissing = allLetters.filter(l => !prev.includes(l));
+      return [...prev, ...uniqueMissing];
+    });
     
    },[isLoser, word])
 
@@ -74,18 +69,15 @@ function App() {
 
 
 useEffect(() => {
-
-  for(let i:number =0; i<1; i++){
-     const randomHint: number =  Math.floor(Math.random() * word.length)
-     setGuessedLetters((e) => [...e,  word[randomHint]] );
-   }
+  // Only add the initial hint if the list is empty
+  const randomHint =  Math.floor(Math.random() * word.length)
+  setGuessedLetters([word[randomHint]]);
 
   const handler = (e: KeyboardEvent) => {
     const key = e.key.toLowerCase();
     if (!keys.includes(key)) return;
 
-    setGuessedLetters((current: string[]) => {
-      
+    setGuessedLetters((current) => {
       if (current.includes(key)) return current;
       return [...current, key];
     });
@@ -93,21 +85,20 @@ useEffect(() => {
 
   window.addEventListener("keydown", handler);
   return () => window.removeEventListener("keydown", handler);
-}, []); 
+}, [word]); 
 
 
 
-    function addGuessedLetter(key: any) {
+    function addGuessedLetter(key: string) {
     // record the last key pressed / clicked
     if (guessedLetters.includes(key)) return;
     setGuessedLetters((e: any) => [...e, key]);
-    console.log(guessedLetters);
   }
 
   const resetGame = () => {
-  setGuessedLetters([]); 
-  setWord(words[Math.floor(Math.random() * words.length)]); 
-};
+    setGuessedLetters([]); 
+    setWord(words[Math.floor(Math.random() * words.length)]); 
+  };
 
 
 
