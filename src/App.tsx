@@ -48,7 +48,7 @@ function App() {
   const isLoser: boolean = incorrectLetters.length >= 6;
   const isWinner = incorrectLetters.length < 6 && word.split("").every(letter => guessedLetters.includes(letter));
 
-   const hint: String[]= [];
+
 
 
    useEffect(() =>{
